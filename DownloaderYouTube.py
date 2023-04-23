@@ -33,7 +33,7 @@ class information_video(BaseModel):
                       )
 def downloader_video():
 
-    _url_video = "https://youtu.be/C2aceW7_4lE"
+    _url_video = "https://youtu.be/8Zw-SUz3og8"
     _video_youtube = YouTube(url=_url_video)
 
     _information_video = {
@@ -47,7 +47,9 @@ def downloader_video():
     }
 
     _information_video = json.dumps(_information_video, ensure_ascii=False)
-    logger.info(information_video.parse_raw(_information_video))
+    _information_video = information_video.parse_raw(_information_video)
+
+    logger.info(_information_video.title)
 
 
 if __name__ == '__main__':

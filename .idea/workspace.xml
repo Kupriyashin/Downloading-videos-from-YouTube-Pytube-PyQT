@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a6f34b4-037d-475b-822d-5ec78ed35849" name="Changes" comment="100% получение информации о видео">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9a6f34b4-037d-475b-822d-5ec78ed35849" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
       <change beforePath="$PROJECT_DIR$/DownloaderYouTube.py" beforeDir="false" afterPath="$PROJECT_DIR$/DownloaderYouTube.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,15 +88,29 @@
       <option name="project" value="LOCAL" />
       <updated>1682245952203</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Merge remote-tracking branch 'origin/main'">
+      <created>1682251607919</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1682251607919</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Merge remote-tracking branch 'origin/main'">
+      <created>1682251622129</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1682251622129</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Переустановил пайтон" />
     <MESSAGE value="v0.04" />
     <MESSAGE value="v0.05" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="100% получение информации о видео" />
-    <option name="LAST_COMMIT_MESSAGE" value="100% получение информации о видео" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'" />
   </component>
 </project>
