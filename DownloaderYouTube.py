@@ -8,7 +8,7 @@ from pytube import YouTube
 import backoff
 
 """
-Информация по бибилиотеке Pytube - https://tehnojam.ru/category/development/pytube-skachivaem-youtube-video-s-pomoshju-python.html
+Информация по бибилиотеке Pytube - https://pytube3.readthedocs.io/en/latest/user/quickstart.html
 Информация по бибилиотеке PyQT5 - https://python-scripts.com/pyqt5#install-pyqt5-designer
 Информация по бибилиотеке backoff - https://backoff-utils.readthedocs.io/en/latest/using.html
 """
