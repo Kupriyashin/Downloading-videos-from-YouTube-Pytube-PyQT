@@ -12,6 +12,8 @@ import backoff
 Информация по бибилиотеке PyQT5 - https://python-scripts.com/pyqt5#install-pyqt5-designer
 Информация по бибилиотеке backoff - https://backoff-utils.readthedocs.io/en/latest/using.html
 """
+
+
 class DownloadYoutube:
     def __init__(self, url_video: str):
         self.streams = None
@@ -22,23 +24,14 @@ class DownloadYoutube:
     @backoff.on_exception(backoff.expo,
                           exception=(pytube.exceptions.PytubeError, KeyError),
                           max_tries=7,
-                          jitter=None
+                          jitter=None,
+                          logger=logger
                           )
+    # тута получаем стримы для скачивания контента (шо такое стримы в данной бибилиотеке - читайте в документации библиотеки)
     def video_stream(self) -> list:
-        self.streams = list(enumerate(self.video_youtube.streams.filter().all()))
+        self.streams = list(enumerate(self.video_youtube.streams.all()))
         logger.info(self.streams)
         return self.streams
-
-
-    # def (self):
-    #     _video_youtube = YouTube(url=self.url)
-    #     _streams = _video_youtube.streams.filter().all()
-    #     _videos = list(enumerate(_streams))
-    #     for i in _videos:
-    #         print(i)
-    #
-    #     _streams[random.randint(0, len(_videos) - 1)].download(
-    #         r'D:\Downloading videos from YouTube\Downloading-videos-from-YouTube-Pytube-PyQT\video')
 
 
 if __name__ == '__main__':
