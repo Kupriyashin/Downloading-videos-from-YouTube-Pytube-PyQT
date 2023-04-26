@@ -1,7 +1,15 @@
+backoff==2.2.1
+click==8.1.3
 colorama==0.4.6
 loguru==0.7.0
 PyQt5==5.15.9
+pyqt5-plugins==5.15.9.2.3
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.1
-pytube==12.1.3
+pyqt5-tools==5.15.9.3.3
+python-dotenv==1.0.0
+pytube @ git+https://github.com/pytube/pytube@96315dff218c3c5c4621997a5587f9d677774b97
+qt5-applications==5.15.2.2.3
+qt5-tools==5.15.2.1.3
+typing_extensions==4.5.0
 win32-setctime==1.1.0
