@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from PyQt5 import QtWidgets
 from Form_download import Ui_MainWindow
 import sys
 from datetime import datetime
+from PyQt5.QtCore import QObject, pyqtSignal, QThread
+
 
 import pytube.exceptions
 from loguru import logger
@@ -19,6 +23,7 @@ logger.add("debug.log", format="{time} {level} {message}", level="DEBUG")
 
 class Programm_Window(QtWidgets.QMainWindow):
     def __init__(self):
+        self.Thread_stream = Stream_video_add()
         super(Programm_Window, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -41,8 +46,15 @@ class Programm_Window(QtWidgets.QMainWindow):
         try:
             if self.ui.lineEdit.text():
                 try:
-                    _streams = DownloadYoutube(url_video=self.ui.lineEdit.text()).video_streams(self)
+                    #Тут экземпляр класса и ссылка на видео
+                    url_video = self.ui.lineEdit.text()
+                    video_download_class = DownloadYoutube(url_video=url_video)
 
+                    #А тута поток, в котором все это дело будет выполняться)
+                    Potok = QThread()
+                    video_download_class.moveToThread(Potok)
+                    Potok.started.connect(video_download_class.video_streams)
+                    _streams = video_download_class.signal_work.connect()#впизду..... Какая-то залупа получается
                     if _streams:
                         print(_streams)
 
@@ -56,10 +68,12 @@ class Programm_Window(QtWidgets.QMainWindow):
                         f"{datetime.now().strftime('%H:%M:%S')} - Произошла ошибка при загрузке форматов видео. Попробуйте еще раз!")
             else:
 
-                self.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
+                self.ui.listWidget.addItem(
+                    f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
 
         except Exception:
-            self.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
+            self.ui.listWidget.addItem(
+                f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
 
     def button_directory(self):
         try:
@@ -91,10 +105,14 @@ class Programm_Window(QtWidgets.QMainWindow):
             self.ui.listWidget.addItem(f"{datetime.now()} - Произошла ошибка при выборе директории!")
 
 
-class DownloadYoutube():
+class DownloadYoutube(QObject):
+
+    signal_work = pyqtSignal(list)
+    streams = []
     def __init__(self, url_video: str):
-        self.streams = None
-        self.video_youtube = YouTube(url=url_video)
+        super(DownloadYoutube, self).__init__()
+        self.url = url_video
+
 
     @logger.catch()
     # здесь стоит декоратор потому-что получение атрибутов видео через класс YouTube срабатывает с 10% вероятностью (баг или сам ютуб гадит)
@@ -106,13 +124,15 @@ class DownloadYoutube():
                           logger=logger
                           )
     # тута получаем стримы для скачивания контента (шо такое стримы в данной бибилиотеке - читайте в документации библиотеки)
-    def video_streams(self, qt_class) -> list:
-        qt_class.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Пытаюсь найти видео")
+    def video_streams(self):
 
-        self.streams = list(enumerate(self.video_youtube.streams.all()))
+        self.signal_work.emit([f"{datetime.now().strftime('%H:%M:%S')} - Пытаюсь найти видео"])
+
+        video_youtube = YouTube(url=self.url)
+        self.streams = list(enumerate(video_youtube.streams.all()))
         logger.info(self.streams)
 
-        return self.streams
+        self.signal_work.emit(self.streams)
 
 
 """
