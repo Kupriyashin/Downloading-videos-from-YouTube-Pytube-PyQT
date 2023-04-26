@@ -16,6 +16,7 @@ import backoff
 """
 logger.add("debug.log", format="{time} {level} {message}", level="DEBUG")
 
+
 class Programm_Window(QtWidgets.QMainWindow):
     def __init__(self):
         super(Programm_Window, self).__init__()
@@ -36,24 +37,29 @@ class Programm_Window(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.button_directory)
         self.ui.pushButton.clicked.connect(self.button_download_stream)
 
-
     def button_download_stream(self):
         try:
             if self.ui.lineEdit.text():
                 try:
+                    _streams = DownloadYoutube(url_video=self.ui.lineEdit.text()).video_streams(self)
 
-                    _streams = DownloadYoutube(url_video=self.ui.lineEdit.text()).video_streams()
-                    print(_streams)
+                    if _streams:
+                        print(_streams)
+
+                    else:
+                        self.ui.listWidget.addItem(
+                            f"{datetime.now().strftime('%H:%M:%S')} - Произошла ошибка при загрузке форматов видео. Попробуйте еще раз!")
 
                 except Exception:
 
-                    self.ui.listWidget.addItem("Произошла ошибка при загрузке форматов видео. Попробуйте еще раз!")
+                    self.ui.listWidget.addItem(
+                        f"{datetime.now().strftime('%H:%M:%S')} - Произошла ошибка при загрузке форматов видео. Попробуйте еще раз!")
             else:
 
-                self.ui.listWidget.addItem('Неверно указана ссылка на видео с Youtube')
+                self.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
 
         except Exception:
-            self.ui.listWidget.addItem('Неверно указана ссылка на видео с Youtube')
+            self.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Неверно указана ссылка на видео с Youtube")
 
     def button_directory(self):
         try:
@@ -79,13 +85,13 @@ class Programm_Window(QtWidgets.QMainWindow):
                         }
                         """)
             else:
-                self.ui.listWidget.addItem('Произошла ошибка при выборе директории!')
+                self.ui.listWidget.addItem(f"{datetime.now()} - Произошла ошибка при выборе директории!")
 
         except Exception:
-            self.ui.listWidget.addItem('Произошла ошибка при выборе директории!')
+            self.ui.listWidget.addItem(f"{datetime.now()} - Произошла ошибка при выборе директории!")
 
 
-class DownloadYoutube:
+class DownloadYoutube():
     def __init__(self, url_video: str):
         self.streams = None
         self.video_youtube = YouTube(url=url_video)
@@ -100,15 +106,15 @@ class DownloadYoutube:
                           logger=logger
                           )
     # тута получаем стримы для скачивания контента (шо такое стримы в данной бибилиотеке - читайте в документации библиотеки)
-    def video_streams(self) -> list:
+    def video_streams(self, qt_class) -> list:
+        qt_class.ui.listWidget.addItem(f"{datetime.now().strftime('%H:%M:%S')} - Пытаюсь найти видео")
 
-            _object_qt_class = Programm_Window()
-            _object_qt_class.ui.listWidget.addItem(f"{datetime.now()} - Пытаюсь найти видео")
+        self.streams = list(enumerate(self.video_youtube.streams.all()))
+        logger.info(self.streams)
 
-            self.streams = list(enumerate(self.video_youtube.streams.all()))
-            logger.info(self.streams)
+        return self.streams
 
-            return self.streams
+
 """
 Самое фиговое в backoff то, что если поставить try except, backoff не будет работать. 
 Соответственно, было принято  решение, если по истечению времени ничего не подключилось, 
