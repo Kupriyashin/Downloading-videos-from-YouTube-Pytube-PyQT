@@ -54,9 +54,7 @@ class Programm_Window(QtWidgets.QMainWindow):
                     Potok = QThread()
                     video_download_class.moveToThread(Potok)
                     Potok.started.connect(video_download_class.video_streams)
-                    _streams = video_download_class.signal_work.connect()#впизду..... Какая-то залупа получается
-                    if _streams:
-                        print(_streams)
+                    _streams_err = video_download_class.signal_work.connect()
 
                     else:
                         self.ui.listWidget.addItem(
@@ -107,7 +105,8 @@ class Programm_Window(QtWidgets.QMainWindow):
 
 class DownloadYoutube(QObject):
 
-    signal_work = pyqtSignal(list)
+    signal_work = pyqtSignal(str)
+    signal_finish = pyqtSignal(list)
     streams = []
     def __init__(self, url_video: str):
         super(DownloadYoutube, self).__init__()
@@ -126,13 +125,13 @@ class DownloadYoutube(QObject):
     # тута получаем стримы для скачивания контента (шо такое стримы в данной бибилиотеке - читайте в документации библиотеки)
     def video_streams(self):
 
-        self.signal_work.emit([f"{datetime.now().strftime('%H:%M:%S')} - Пытаюсь найти видео"])
+        self.signal_work.emit(f"{datetime.now().strftime('%H:%M:%S')} - Пытаюсь найти видео")
 
         video_youtube = YouTube(url=self.url)
         self.streams = list(enumerate(video_youtube.streams.all()))
         logger.info(self.streams)
 
-        self.signal_work.emit(self.streams)
+        self.signal_finish.emit(self.streams)
 
 
 """
