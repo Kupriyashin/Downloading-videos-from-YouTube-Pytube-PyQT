@@ -23,7 +23,6 @@ logger.add("debug.log", format="{time} {level} {message}", level="DEBUG")
 
 class Programm_Window(QtWidgets.QMainWindow):
     def __init__(self):
-        self.Thread_stream = Stream_video_add()
         super(Programm_Window, self).__init__()
 
         self.ui = Ui_MainWindow()
@@ -53,12 +52,13 @@ class Programm_Window(QtWidgets.QMainWindow):
                     #А тута поток, в котором все это дело будет выполняться)
                     Potok = QThread()
                     video_download_class.moveToThread(Potok)
-                    Potok.started.connect(video_download_class.video_streams)
-                    _streams_err = video_download_class.signal_work.connect()
 
-                    else:
-                        self.ui.listWidget.addItem(
-                            f"{datetime.now().strftime('%H:%M:%S')} - Произошла ошибка при загрузке форматов видео. Попробуйте еще раз!")
+                    Potok.started.connect(video_download_class.video_streams)
+                    video_download_class.signal_work.connect(self.ui.listWidget.addItem)
+                    _streams = video_download_class.signal_finish.connect(Potok.quit)
+
+                    Potok.start()
+                    print(_streams)
 
                 except Exception:
 
