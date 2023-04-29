@@ -11,7 +11,6 @@ from Form_download import Ui_MainWindow
 import sys
 from datetime import datetime
 from PyQt5.QtCore import pyqtSignal, QThread, QRegExp
-from PyQt5.QtCore import Qt
 
 from loguru import logger
 from pytube import YouTube
